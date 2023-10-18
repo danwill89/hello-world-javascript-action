@@ -30016,13 +30016,13 @@ const run = async () => {
         //console.log(`The event payload: ${payload}`);
       
         const context = github.context;
-        const { issue } = context;
+        console.log(context);
         const octokit = github.getOctokit(github_token);
-        const { owner, repo, pull_number } = issue;
+        const pull_request_number = context.payload.pull_request.number;
+        console.log(pull_request_number);
         await octokit.rest.issues.createComment({
-          owner,
-          repo,
-          issue_number: pull_number,
+          ...context.repo,
+          issue_number: pull_request_number,
           body: `Hello ${nameToGreet}!`
         })
       } catch (error) {
