@@ -41,7 +41,7 @@ const run = async () => {
     );
     const results = await response.json();
     console.log(results);
-    console.log(results.choices[0].message);
+    console.log(JSON.stringify(results.choices[0].message));
 
     const context = github.context;
     const octokit = github.getOctokit(github_token);
