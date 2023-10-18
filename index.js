@@ -32,6 +32,7 @@ const run = async () => {
     const response = await fetch(
       process.env.AZURE_URL,
       {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           "api-key": process.env.OPENAI_API_KEY,

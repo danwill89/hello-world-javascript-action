@@ -30031,8 +30031,9 @@ const run = async () => {
       stop: null,
     };
     const response = await fetch(
-      "https://lab-azure-ai.openai.azure.com/openai/deployments/turbo301/chat/completions?api-version=2023-07-01-preview",
+      process.env.AZURE_URL,
       {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           "api-key": process.env.OPENAI_API_KEY,
