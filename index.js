@@ -41,7 +41,7 @@ const run = async () => {
     );
     const results = await response.json();
     console.log(results);
-    console.log(JSON.stringify(results.choices[0].message));
+    console.log(JSON.stringify(results.choices[0].message.content));
 
     const context = github.context;
     const octokit = github.getOctokit(github_token);
@@ -50,7 +50,7 @@ const run = async () => {
     await octokit.rest.issues.createComment({
       ...context.repo,
       issue_number: pull_request_number,
-      body: `Hello ${nameToGreet}!\n${results.choices[0].message}`,
+      body: `Hello ${nameToGreet}!\n${results.choices[0].message.content}`,
     });
   } catch (error) {
     core.setFailed(error.message);
