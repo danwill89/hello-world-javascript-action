@@ -30003,33 +30003,61 @@ const core = __nccwpck_require__(9223);
 const github = __nccwpck_require__(4936);
 
 const run = async () => {
-    try {
-        // 'who-to-greet' input defined in action metadata file
-        const nameToGreet = core.getInput("who-to-greet");
-        console.log(`Hello ${nameToGreet}!`);
-        const time = new Date().toTimeString();
-        core.setOutput("time", time);
-        const github_token = process.env.GITHUB_TOKEN;
-        console.log(github_token.length)
-        // Get the JSON webhook payload for the event that triggered the workflow
-        //const payload = JSON.stringify(github.context.payload, undefined, 2);
-        //console.log(`The event payload: ${payload}`);
-      
-        const context = github.context;
-        console.log(context);
-        const octokit = github.getOctokit(github_token);
-        const pull_request_number = context.payload.pull_request.number;
-        console.log(pull_request_number);
-        await octokit.rest.issues.createComment({
-          ...context.repo,
-          issue_number: pull_request_number,
-          body: `Hello ${nameToGreet}!`
-        })
-      } catch (error) {
-        core.setFailed(error.message);
-        console.log(error.message);
+  try {
+    // 'who-to-greet' input defined in action metadata file
+    const nameToGreet = core.getInput("who-to-greet");
+    console.log(`Hello ${nameToGreet}!`);
+    const time = new Date().toTimeString();
+    core.setOutput("time", time);
+    const github_token = process.env.GITHUB_TOKEN;
+    console.log(github_token.length);
+    // Get the JSON webhook payload for the event that triggered the workflow
+    //const payload = JSON.stringify(github.context.payload, undefined, 2);
+    //console.log(`The event payload: ${payload}`);
+
+    const data = {
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are an AI assistant that helps people find information.",
+        },
+      ],
+      max_tokens: 800,
+      temperature: 0.7,
+      frequency_penalty: 0,
+      presence_penalty: 0,
+      top_p: 0.95,
+      stop: null,
+    };
+    const response = await fetch(
+      "https://lab-azure-ai.openai.azure.com/openai/deployments/turbo301/chat/completions?api-version=2023-07-01-preview",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "api-key": process.env.OPENAI_API_KEY,
+        },
+        body: JSON.stringify(data), // body data type must match "Content-Type" header
       }
-}
+    );
+    const results = await response.json();
+    console.log(results);
+
+    const context = github.context;
+    console.log(context);
+    const octokit = github.getOctokit(github_token);
+    const pull_request_number = context.payload.pull_request.number;
+    console.log(pull_request_number);
+    await octokit.rest.issues.createComment({
+      ...context.repo,
+      issue_number: pull_request_number,
+      body: `Hello ${nameToGreet}!`,
+    });
+  } catch (error) {
+    core.setFailed(error.message);
+    console.log(error.message);
+  }
+};
 run();
 
 })();
