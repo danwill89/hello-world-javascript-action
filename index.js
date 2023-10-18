@@ -9,7 +9,7 @@ const run = async () => {
         const time = new Date().toTimeString();
         core.setOutput("time", time);
         const github_token = core.getInput('GITHUB_TOKEN');
-        confirm.log(github_token.length)
+        console.log(github_token.length)
         // Get the JSON webhook payload for the event that triggered the workflow
         //const payload = JSON.stringify(github.context.payload, undefined, 2);
         //console.log(`The event payload: ${payload}`);
