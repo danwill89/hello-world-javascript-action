@@ -16,7 +16,7 @@ const run = async () => {
         const context = github.context;
         const issue_number = parseInt(pr_number) || context.payload.pull_request?.number || context.payload.issue?.number;
         const octokit = github.getOctokit(github_token);
-        const data = await octokit.rest.issues.createComment({
+        await octokit.rest.issues.createComment({
           ...context.repo,
           issue_number,
           body: `Hello ${nameToGreet}!`
