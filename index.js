@@ -62,12 +62,10 @@ const run = async () => {
     console.log(results);
     console.log(JSON.stringify(results.choices[0].message.content));
 
-    
-
     await octokit.rest.issues.createComment({
       ...context.repo,
       issue_number: pull_request_number,
-      body: results,
+      body: results.choices[0].message.content,
     });
   } catch (error) {
     core.setFailed(error.message);
