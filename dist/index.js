@@ -30056,7 +30056,7 @@ const run = async () => {
         pull_number: pull_request_number
       });
 
-    console.log('Files: ' + files);
+    console.log('Files: ' + JSON.stringify(files));
 
     // await octokit.rest.issues.createComment({
     //   ...context.repo,
