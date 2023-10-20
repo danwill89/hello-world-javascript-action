@@ -30014,36 +30014,6 @@ const run = async () => {
     //const payload = JSON.stringify(github.context.payload, undefined, 2);
     //console.log(`The event payload: ${payload}`);
 
-    const data = {
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are an AI assistant that helps people find information.",
-        },
-      ],
-      max_tokens: 800,
-      temperature: 0.7,
-      frequency_penalty: 0,
-      presence_penalty: 0,
-      top_p: 0.95,
-      stop: null,
-    };
-    // const response = await fetch(
-    //   process.env.AZURE_URL,
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       "api-key": process.env.OPENAI_API_KEY,
-    //     },
-    //     body: JSON.stringify(data), // body data type must match "Content-Type" header
-    //   }
-    // );
-    // const results = await response.json();
-    // console.log(results);
-    // console.log(JSON.stringify(results.choices[0].message.content));
-
     const context = github.context;
     console.log(context);
     const octokit = github.getOctokit(github_token);
@@ -30057,12 +30027,49 @@ const run = async () => {
       });
 
     console.log('Files: ' + JSON.stringify(files));
+    let changes = '';
+    for(const data of files.data) {
+      console.log(data.patch);
+      changes+=data.patch;
+    }
 
-    // await octokit.rest.issues.createComment({
-    //   ...context.repo,
-    //   issue_number: pull_request_number,
-    //   body: `Hello ${nameToGreet}!\n${results.choices[0].message.content}`,
-    // });
+    const data = {
+      messages: [
+        {
+          role: "system",
+          content:
+          `You are an AI Assistant that's an expert at reviewing pull requests. Review the below pull request that you receive between the exclamation marks.\nInput format\n- The input format follows Github diff format with addition and subtraction of code.\n- The + sign means that code has been added.\n- The - sign means that code has been removed.\nInstructions\n- Take into account that you don't have access to the full code but only the code diff.\n- Only answer on what can be improved and provide the improvement in code.\n- Answer in short form.\n- Include code snippets if necessary.\n- Adhere to the languages code conventions.\n!!!${changes}!!!`,
+        },
+      ],
+      max_tokens: 800,
+      temperature: 0.7,
+      frequency_penalty: 0,
+      presence_penalty: 0,
+      top_p: 0.95,
+      stop: null,
+    };
+    const response = await fetch(
+      process.env.AZURE_URL,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "api-key": process.env.OPENAI_API_KEY,
+        },
+        body: JSON.stringify(data), // body data type must match "Content-Type" header
+      }
+    );
+    const results = await response.json();
+    console.log(results);
+    console.log(JSON.stringify(results.choices[0].message.content));
+
+    
+
+    await octokit.rest.issues.createComment({
+      ...context.repo,
+      issue_number: pull_request_number,
+      body: results,
+    });
   } catch (error) {
     core.setFailed(error.message);
     console.log(error.message);
