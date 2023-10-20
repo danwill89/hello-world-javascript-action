@@ -30045,17 +30045,18 @@ const run = async () => {
     // console.log(JSON.stringify(results.choices[0].message.content));
 
     const context = github.context;
+    console.log(context);
     const octokit = github.getOctokit(github_token);
     const pull_request_number = context.payload.pull_request.number;
     console.log(pull_request_number);
 
      const files = await octokit.rest.pulls.listFiles({
-        owner: context.repo.owner,
-        repo: context.repo,
+        ...context.repo.owner,
+        ...context.repo,
         pull_number: pull_request_number
       });
 
-    console.log(files);
+    console.log('Files: ' + files);
 
     // await octokit.rest.issues.createComment({
     //   ...context.repo,
