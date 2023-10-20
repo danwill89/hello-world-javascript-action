@@ -30029,30 +30029,39 @@ const run = async () => {
       top_p: 0.95,
       stop: null,
     };
-    const response = await fetch(
-      process.env.AZURE_URL,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "api-key": process.env.OPENAI_API_KEY,
-        },
-        body: JSON.stringify(data), // body data type must match "Content-Type" header
-      }
-    );
-    const results = await response.json();
-    console.log(results);
-    console.log(JSON.stringify(results.choices[0].message.content));
+    // const response = await fetch(
+    //   process.env.AZURE_URL,
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       "api-key": process.env.OPENAI_API_KEY,
+    //     },
+    //     body: JSON.stringify(data), // body data type must match "Content-Type" header
+    //   }
+    // );
+    // const results = await response.json();
+    // console.log(results);
+    // console.log(JSON.stringify(results.choices[0].message.content));
 
     const context = github.context;
     const octokit = github.getOctokit(github_token);
     const pull_request_number = context.payload.pull_request.number;
     console.log(pull_request_number);
-    await octokit.rest.issues.createComment({
-      ...context.repo,
-      issue_number: pull_request_number,
-      body: `Hello ${nameToGreet}!\n${results.choices[0].message.content}`,
-    });
+
+     const files = await octokit.rest.pulls.listFiles({
+        owner: context.repo.owner,
+        repo: context.repo,
+        pull_number: pull_request_number
+      });
+
+    console.log(files);
+
+    // await octokit.rest.issues.createComment({
+    //   ...context.repo,
+    //   issue_number: pull_request_number,
+    //   body: `Hello ${nameToGreet}!\n${results.choices[0].message.content}`,
+    // });
   } catch (error) {
     core.setFailed(error.message);
     console.log(error.message);
