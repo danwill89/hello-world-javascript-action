@@ -30038,11 +30038,21 @@ const run = async () => {
         {
           role: "system",
           content:
-          `You are an AI Assistant that's an expert at reviewing pull requests. Review the below pull request that you receive between the exclamation marks.\nInput format\n- The input format follows Github diff format with addition and subtraction of code.\n- The + sign means that code has been added.\n- The - sign means that code has been removed.\nInstructions\n- Take into account that you don't have access to the full code but only the code diff.\n- Only answer on what can be improved and provide the improvement in code.\n- Answer in short form.\n- Include code snippets if necessary.\n- Adhere to the languages code conventions.\n!!!${changes}!!!`,
+          `You are an AI Assistant that's an expert at reviewing pull requests. Review the below pull request that you receive between the exclamation marks. Output the review in markdown format, listing headers for each file that changed and any comments you wish to make, if the are no suggestions for a file just write "No Comment". 
+          Input format
+          - The input format follows Github diff format with addition and subtraction of code.
+          - The + sign means that code has been added.
+          - The - sign means that code has been removed.
+          Instructions
+          - Take into account that you don't have access to the full code but only the code diff.
+          - Only answer on what can be improved and provide the improvement in code.
+          - Answer in short form.\n- Include code snippets if necessary.
+          - Adhere to the languages code conventions.
+          !!!${changes}!!!`,
         },
       ],
       max_tokens: 800,
-      temperature: 0.7,
+      temperature: 0,
       frequency_penalty: 0,
       presence_penalty: 0,
       top_p: 0.95,
