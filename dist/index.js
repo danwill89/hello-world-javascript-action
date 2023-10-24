@@ -30038,7 +30038,15 @@ const run = async () => {
         {
           role: "system",
           content:
-          `You are an AI Assistant that's an expert at reviewing pull requests. Review the below pull request that you receive between the exclamation marks. Output the review in markdown format, listing headers for each file that changed and any comments you wish to make, if the are no suggestions for a file just write "No Comment". 
+          `You are an AI Assistant that's an expert at reviewing pull requests. Review the below pull request that you receive between the exclamation marks. 
+          Output the review in markdown format.    
+          For example:    
+          ### <Filename>    
+          <proposed changes in git diff format>    
+          <explanation of changes>    
+          If there are no changes write 'No Comment' 
+          ------------
+             
           Input format
           - The input format follows Github diff format with addition and subtraction of code.
           - The + sign means that code has been added.
