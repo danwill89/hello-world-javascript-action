@@ -51,10 +51,12 @@ const run = async () => {
           - Include code snippets if necessary.  
           - Adhere to the languages code conventions.  
           &nbsp;  
-          Output format:      
-          ### <Filename>      
-          <your suggested changes in git diff format>      
-          <explanation of your suggested changes, if there are none write 'No changes'>  
+          Output format:  
+          A table with 2 columns, filename and summary. Write all the names of the files that have changed in the filename column and a one line summary of the changes. Then for each file output the following -            
+          ### <Filename>            
+          <2 bullet point summary of the changes>    
+          #### Improvements    
+          <list of improvements, if there are none write 'No code changes'> 
           !!!${changes}!!!`,
         },
       ],
