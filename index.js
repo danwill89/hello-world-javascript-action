@@ -77,7 +77,9 @@ const run = async () => {
     );
     const results = await response.json();
     console.log(results);
-    console.log(JSON.stringify(results.choices[0].message.content));
+    for(const choice of results.choices){
+      console.log(JSON.stringify(choice.message.content));
+    }
 
     await octokit.rest.issues.createComment({
       ...context.repo,
