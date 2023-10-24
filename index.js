@@ -39,13 +39,7 @@ const run = async () => {
           content:
           `You are an AI Assistant that's an expert at reviewing pull requests. Review the below pull request that you receive between the exclamation marks. 
           Output the review in markdown format.    
-          For example:    
-          ### <Filename>    
-          <proposed changes in git diff format>    
-          <explanation of changes>    
-          If there are no changes write 'No Comment' 
-          ------------
-             
+        
           Input format
           - The input format follows Github diff format with addition and subtraction of code.
           - The + sign means that code has been added.
@@ -55,6 +49,11 @@ const run = async () => {
           - Only answer on what can be improved and provide the improvement in code.
           - Answer in short form.\n- Include code snippets if necessary.
           - Adhere to the languages code conventions.
+          Output format:    
+          ### <Filename>    
+          <proposed changes in git diff format>    
+          <explanation of proposed changes, if there are none write 'No Comment'>
+          ------------
           !!!${changes}!!!`,
         },
       ],
